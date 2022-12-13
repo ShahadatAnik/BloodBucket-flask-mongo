@@ -1,0 +1,13 @@
+{% extends "base.html" %} {% block title %}User Information{% endblock %} {%
+block content %}
+<p>{{ name }}</p>
+<p>{{ email }}</p>
+<p>{{ phone }}</p>
+<p>{{ bloodGroup }}</p>
+<p>{{ lastDonation }}</p>
+<p>{{ nextDonation }}</p>
+<p>{{ timeRemaining }}</p>
+
+<a class="btn btn-primary" href="/update-user-info">Update</a>
+
+{% endblock %}

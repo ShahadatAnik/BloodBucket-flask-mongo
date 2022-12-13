@@ -1,0 +1,179 @@
+{% extends "base.html" %} {% block title %}Donner{% endblock %} {% block content
+%}
+<section class="pt-5 pb-5 mt-0 align-items-center d-flex">
+    <div class="container-fluid">
+        <div
+            class="row justify-content-center align-items-center d-flex-row text-center h-100"
+        >
+            <div class="col-12 col-md-4 col-lg-3 h-50">
+                <div class="card shadow">
+                    <div class="card-body mx-auto">
+                        <h2
+                            class="card-title mt-3 mb-4 text-center px-2 text-danger"
+                        >
+                            Update Info
+                        </h2>
+                        <form name="signup_form" action="" method="POST">
+                            <div
+                                class="form-group input-group flex-nowrap mb-3"
+                            >
+                                <span
+                                    class="input-group-text"
+                                    id="addon-wrapping"
+                                    ><i
+                                        class="fa fa-user"
+                                        aria-hidden="true"
+                                    ></i
+                                ></span>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    class="form-control"
+                                    placeholder="Name"
+                                    aria-label="Name"
+                                    value="{{name}}"
+                                    aria-describedby="addon-wrapping"
+                                    required
+                                />
+                            </div>
+                            <div
+                                class="form-group input-group flex-nowrap mb-3"
+                            >
+                                <span
+                                    class="input-group-text"
+                                    id="addon-wrapping"
+                                    ><i
+                                        class="fa fa-envelope"
+                                        aria-hidden="true"
+                                    ></i
+                                ></span>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    class="form-control"
+                                    placeholder="Email"
+                                    aria-label="Email"
+                                    value="{{email}}"
+                                    aria-describedby="addon-wrapping"
+                                    required
+                                />
+                            </div>
+                            <div
+                                class="form-group input-group flex-nowrap mb-3"
+                            >
+                                <span
+                                    class="input-group-text"
+                                    id="addon-wrapping"
+                                    ><i
+                                        class="fa fa-phone"
+                                        aria-hidden="true"
+                                    ></i
+                                ></span>
+                                <input
+                                    type="number"
+                                    name="phone"
+                                    class="form-control"
+                                    placeholder="Phone Number"
+                                    aria-label="Phone Number"
+                                    value="{{phone}}"
+                                    aria-describedby="addon-wrapping"
+                                    required
+                                />
+                            </div>
+                            <div
+                                class="form-group input-group flex-nowrap mb-3"
+                            >
+                                <span
+                                    class="input-group-text"
+                                    id="addon-wrapping"
+                                    ><i
+                                        class="fa fa-heart"
+                                        aria-hidden="true"
+                                    ></i
+                                ></span>
+                                <select
+                                    class="form-control inputstl"
+                                    id="expertise"
+                                    name="bloodGroup"
+                                >
+                                    {% if bloodGroup == 'A+' %}
+                                    <option selected value="A+">A+</option>
+                                    {% else %}
+                                    <option value="A+">A+</option>
+                                    {% endif %} {% if bloodGroup == 'A-' %}
+                                    <option selected value="A-">A-</option>
+                                    {% else %}
+                                    <option value="A-">A-</option>
+                                    {% endif %} {% if bloodGroup == 'B+' %}
+                                    <option selected value="B+">B+</option>
+                                    {% else %}
+                                    <option value="B+">B+</option>
+                                    {% endif %} {% if bloodGroup == 'B-' %}
+                                    <option selected value="B-">B-</option>
+                                    {% else %}
+                                    <option value="B-">B-</option>
+                                    {% endif %} {% if bloodGroup == 'AB+' %}
+                                    <option selected value="AB+">AB+</option>
+                                    {% else %}
+                                    <option value="AB+">AB+</option>
+                                    {% endif %} {% if bloodGroup == 'AB-' %}
+                                    <option selected value="AB-">AB-</option>
+                                    {% else %}
+                                    <option value="AB-">AB-</option>
+                                    {% endif %} {% if bloodGroup == 'O+' %}
+                                    <option selected value="O+">O+</option>
+                                    {% else %}
+                                    <option value="O+">O+</option>
+                                    {% endif %} {% if bloodGroup == 'O-' %}
+                                    <option selected value="O-">O-</option>
+                                    {% else %}
+                                    <option value="O-">O-</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div
+                                class="form-group input-group flex-nowrap mb-3"
+                            >
+                                <span
+                                    class="input-group-text"
+                                    id="addon-wrapping"
+                                    ><i
+                                        class="fa fa-calendar"
+                                        aria-hidden="true"
+                                    ></i
+                                ></span>
+                                <input
+                                    type="date"
+                                    name="lastDonation"
+                                    class="form-control"
+                                    value="{{lastDonation}}"
+                                    placeholder="Last Donation"
+                                    aria-label="Last Donation"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group mb-2">
+                                <button
+                                    type="submit"
+                                    name="submit"
+                                    class="btn btn-danger btn-block fw-bold"
+                                >
+                                    Update
+                                </button>
+                            </div>
+                            {% if error != "" %}
+                            <div class="alert alert-danger">{{ error }}</div>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+{% endblock %}

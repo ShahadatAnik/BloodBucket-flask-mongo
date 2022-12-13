@@ -54,18 +54,23 @@
                                 >
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="sell-book">Sell</a>
+                                <a class="nav-link" href="/donner">Donner</a>
                             </li>
                         </ul>
                         <div class="d-flex">
-                            {% if isLogin %}
+                            {% if name != "" %}
                             <span class="navbar-text fw-bold fs-5 mx-2">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                                {{name}}
+                                <a class="nav-link" href="/user-info"
+                                    ><i
+                                        class="fa fa-user"
+                                        aria-hidden="true"
+                                    ></i
+                                    >{{" "+name}}</a
+                                >
                             </span>
                             <button
                                 class="btn btn-danger fw-bold"
-                                onclick="window.location.href = '/login'"
+                                onclick="window.location.href = '/logout';"
                             >
                                 Logout
                             </button>
