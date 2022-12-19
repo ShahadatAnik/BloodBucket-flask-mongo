@@ -185,7 +185,7 @@ def updateUserInfo():
     )
 
 
-@app.route("/donner")
+@app.route("/donner", methods=["GET", "POST"])
 def donner():
     days = datetime.datetime.now() - datetime.timedelta(days=90)
     d = str(days.strftime("%Y-%m-%d"))
@@ -197,13 +197,69 @@ def donner():
             },
         },
         {"_id": 0, "password": 0, "email": 0, "phone": 0},
-    )
+    ).sort([("bloodGroup", pymongo.ASCENDING), ("lastDonation", pymongo.DESCENDING)])
+
+    if request.method == "POST":
+        donner_name_or_blood_group = request.form.get("donner_name_or_blood_group")
+        result = users.find(
+            {
+                "$or": [
+                    {"name": {"$regex": donner_name_or_blood_group, "$options": "i"}},
+                    {
+                        "bloodGroup": {
+                            "$regex": donner_name_or_blood_group,
+                            "$options": "i",
+                        }
+                    },
+                ],
+                "lastDonation": {
+                    "$lt": d,
+                },
+            },
+            {"_id": 0, "password": 0, "email": 0, "phone": 0},
+        ).sort(
+            [("bloodGroup", pymongo.ASCENDING), ("lastDonation", pymongo.DESCENDING)]
+        )
+        # result_count = users.find(
+        #     {
+        #         "$or": [
+        #             {"name": {"$regex": donner_name_or_blood_group, "$options": "i"}},
+        #             {
+        #                 "bloodGroup": {
+        #                     "$regex": donner_name_or_blood_group,
+        #                     "$options": "i",
+        #                 }
+        #             },
+        #         ],
+        #         "lastDonation": {
+        #             "$lt": d,
+        #         },
+        #     },
+        #     {"_id": 0, "password": 0, "email": 0, "phone": 0},
+        # ).count()
+        # print(result_count)
 
     return render_template(
         "donner.html",
         name=authUser["name"],
         email=authUser["email"],
         result=result,
+    )
+
+
+@app.route("/donner/<name>")
+def donnerInfo(name):
+    result = users.find_one(
+        {
+            "name": name,
+        },
+        {"_id": 0, "password": 0},
+    )
+    return render_template(
+        "donner-info.html",
+        name=authUser["name"],
+        email=authUser["email"],
+        donner=result,
     )
 
 

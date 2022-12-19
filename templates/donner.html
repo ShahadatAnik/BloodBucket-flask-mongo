@@ -1,8 +1,85 @@
 {% extends "base.html" %} {% block title %}Donner{% endblock %} {% block content
-%} {% for donner in result %}
+%}
+<div>
+    <div
+        class="text-center shadow p-3 mt-2 rounded"
+        style="background-color: #d43838"
+    >
+        <h1 class="text-white">Donner's Information</h1>
+    </div>
+    <form class="form-inline mx-5" style="margin-top: -1em" method="POST">
+        <div class="input-group col-md-6">
+            <input
+                type="text"
+                name="donner_name_or_blood_group"
+                class="form-control border-warning border-5"
+                placeholder="Search Donner Here..."
+                required
+            />
+            <span class="input-group-btn">
+                <button
+                    class="btn btn-primary"
+                    type="submit"
+                    name="submit_donner_name_or_blood_group"
+                >
+                    Search <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </span>
+        </div>
+    </form>
 
-<p>{{donner['name']}}</p>
-<p>{{donner['bloodGroup']}}</p>
-<p>{{donner['lastDonation']}}</p>
-
-{% endfor %} {% endblock %}
+    <div
+        class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-4 mt-2"
+    >
+        {% for donner in result %}
+        <div class="col d-flex justify-content-center">
+            <div class="card text-bg-danger w-100 text-center">
+                <a
+                    href="/donner/{{donner['name']}}"
+                    class="text-decoration-none text-white"
+                >
+                    <div class="card-body">
+                        <!-- <h3 class="card-text">
+                        <i
+                            class="fa fa-user"
+                            aria-hidden="true"
+                            style="color: red"
+                        ></i>
+                        {{donner['name']}}
+                    </h3> -->
+                        <!-- <h3 class="card-header">{{donner['name']}}</h3> -->
+                        <h3 class="card-text">{{donner['name']}}</h3>
+                        <h4 class="card-text">
+                            <i
+                                class="fa fa-heart"
+                                aria-hidden="true"
+                                style="color: white"
+                            ></i>
+                            {{donner['bloodGroup']}}
+                        </h4>
+                        <h4 class="card-text">
+                            <i
+                                class="fa fa-calendar"
+                                aria-hidden="true"
+                                style="color: white"
+                            ></i>
+                            {{donner['lastDonation']}}
+                        </h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- <div class="d-flex">
+        <div class="flex-grow-1 alert alert-danger text-center" role="alert">
+            No Books Found
+        </div>
+    </div> -->
+    </div>
+</div>
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+{% endblock %}

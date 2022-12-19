@@ -1,7 +1,60 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-%}
+{% extends "base.html" %} {% block title %}Home{%endblock%} {% block content %}
+{% block banner_slider %}
+<!--Banner Slider-->
+<div
+    id="carouselExampleControls"
+    class="carousel slide"
+    data-bs-ride="carousel"
+>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img
+                src="{{url_for('static', filename='image1.jpg')}}"
+                class="d-block w-100"
+            />
+        </div>
+        <div class="carousel-item">
+            <img
+                src="{{url_for('static', filename='img2.jpg')}}"
+                class="d-block w-100"
+            />
+        </div>
+        <div class="carousel-item">
+            <img
+                src="{{url_for('static', filename='img3.jpg')}}"
+                class="d-block w-100"
+            />
+        </div>
+    </div>
+    <a
+        class="carousel-control-prev"
+        href="#carouselExampleControls"
+        role="button"
+        data-bs-slide="prev"
+    >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </a>
+    <a
+        class="carousel-control-next"
+        href="#carouselExampleControls"
+        role="button"
+        data-bs-slide="next"
+    >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </a>
+</div>
+<!-- End Banner Slider -->
 
-<p>{{name}}</p>
-<p>{{randNum}}</p>
-<p>what is your name</p>
-{% endblock %}
+{% endblock banner_slider %}
+<div class="container_fluid bg-danger">
+    <!-- Footer content -->
+    <align-center
+        ><h1 style="color: white">
+            <b> Donate Blood Save Life!! </b>
+        </h1></align-center
+    >
+</div>
+
+{%endblock%}
