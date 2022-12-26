@@ -1,13 +1,5 @@
-{% extends "base.html" %} {% block title %}User Information{% endblock %} {%
-block content %}
-<!-- <p>{{ name }}</p>
-<p>{{ email }}</p>
-<p>{{ phone }}</p>
-<p>{{ bloodGroup }}</p>
-<p>{{ lastDonation }}</p>
-<p>{{ nextDonation }}</p>
-<p>{{ timeRemaining }}</p> -->
-
+{% extends "base.html" %} {% block title %}Donner - {{donner['name']}}{%
+endblock %} {% block content %}
 <div>
     <div
         class="text-center shadow mt-2 rounded"
@@ -17,7 +9,7 @@ block content %}
             padding-top: 1em;
         "
     >
-        <h1 class="text-white border-bottom border-5">User Details</h1>
+        <h1 class="text-white border-bottom border-5">Donner Details</h1>
     </div>
 
     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 mt-2">
@@ -26,10 +18,9 @@ block content %}
             style="margin-top: -15em"
         >
             <img
-                src="static\user-info.png"
+                src="static\user-info-2.png"
                 class="img-fluid"
                 alt="Responsive image"
-                style="background-blend-mode: unset"
             />
         </div>
         <div
@@ -39,14 +30,14 @@ block content %}
             <div class="card text-bg-danger w-75 text-center pb-3">
                 <div class="card-body">
                     <div class="rounded px-2 py-4">
-                        <h2 class="card-text mb-4">{{name}}</h2>
+                        <h2 class="card-text mb-4">{{donner['name']}}</h2>
                         <h4 class="card-text">
                             <i
                                 class="fa fa-heart"
                                 aria-hidden="true"
                                 style="color: white"
                             ></i>
-                            {{bloodGroup}}
+                            {{donner['bloodGroup']}}
                         </h4>
                     </div>
                     <div class="px-2 py-4" style="background-color: #9d4242">
@@ -56,7 +47,7 @@ block content %}
                                 aria-hidden="true"
                                 style="color: white"
                             ></i>
-                            {{phone}}
+                            {{donner['phone']}}
                         </h4>
                         <h4 class="card-text">
                             <i
@@ -64,43 +55,20 @@ block content %}
                                 aria-hidden="true"
                                 style="color: white"
                             ></i>
-                            {{email}}
+                            {{donner['email']}}
                         </h4>
                     </div>
 
                     <div class="px-2 py-4">
                         <h4 class="card-text">
-                            You have donated blood on
                             <i
                                 class="fa fa-calendar"
                                 aria-hidden="true"
                                 style="color: white"
                             ></i>
-                            {{lastDonation}} and you can donate blood on
-                            <i
-                                class="fa fa-calendar"
-                                aria-hidden="true"
-                                style="color: white"
-                            ></i>
-                            {{nextDonation}}
-                            <br />
-                            <br />
-                            You have to wait for
-                            <i
-                                class="fa fa-clock-o"
-                                aria-hidden="true"
-                                style="color: white"
-                            ></i>
-                            {{timeRemaining}} days
+                            {{donner['lastDonation']}}
                         </h4>
                     </div>
-                </div>
-                <div class="text-center" style="z-index: 5">
-                    <a
-                        class="btn btn-warning fw-bold btn-lg w-50"
-                        href="/update-user-info"
-                        >Update</a
-                    >
                 </div>
             </div>
         </div>
@@ -111,5 +79,4 @@ block content %}
         window.history.replaceState(null, null, window.location.href);
     }
 </script>
-
 {% endblock %}
