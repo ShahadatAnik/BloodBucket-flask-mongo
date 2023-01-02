@@ -76,7 +76,7 @@ class User:
         if pbkdf2_sha256.verify(
             user["password"], users.find_one({"email": user["email"]})["password"]
         ):
-            temp = users.find_one({"email": user["email"]}, {"_id": 0, "password": 0})
+            temp = users.find_one({"email": user["email"]}, {"password": 0})
             authUser["name"] = temp["name"]
             authUser["email"] = temp["email"]
             authUser["phone"] = temp["phone"]
@@ -247,9 +247,7 @@ class Hospital:
             hospital["password"],
             hospitals.find_one({"email": hospital["email"]})["password"],
         ):
-            temp = hospitals.find_one(
-                {"email": hospital["email"]}, {"_id": 0, "password": 0}
-            )
+            temp = hospitals.find_one({"email": hospital["email"]}, {"password": 0})
             authHospital["name"] = temp["name"]
             authHospital["email"] = temp["email"]
             authHospital["phone"] = temp["phone"]
@@ -422,7 +420,7 @@ def hospitalInfo():
     )
 
 
-@app.route("/update-hospital-info", methods=["POST"])
+@app.route("/update-hospital-info", methods=["GET", "POST"])
 def updateHospital():
     error = ""
     if request.method == "POST":
@@ -444,10 +442,12 @@ def updateHospital():
         )
         if error != 200:
             return render_template(
-                "hospital/update-hospitals.html",
+                "hospital/update-hospital-info.html",
                 error=error,
-                name=authHospital["name"],
-                email=authHospital["email"],
+                name=authUser["name"],
+                email=authUser["email"],
+                hospitalName=authHospital["name"],
+                hospitalEmail=authHospital["email"],
                 phone=authHospital["phone"],
                 address=authHospital["address"],
                 city=authHospital["city"],
@@ -465,10 +465,12 @@ def updateHospital():
             return redirect("/hospital-info", code=302)
 
     return render_template(
-        "hospital/update-hospitals.html",
+        "hospital/update-hospital-info.html",
         error=error,
-        name=authHospital["name"],
-        email=authHospital["email"],
+        name=authUser["name"],
+        email=authUser["email"],
+        hospitalName=authHospital["name"],
+        hospitalEmail=authHospital["email"],
         phone=authHospital["phone"],
         address=authHospital["address"],
         city=authHospital["city"],
@@ -508,7 +510,7 @@ def donner():
                 "$lt": d,
             },
         },
-        {"_id": 0, "password": 0, "email": 0, "phone": 0},
+        {"password": 0, "email": 0, "phone": 0},
     ).sort([("bloodGroup", pymongo.ASCENDING), ("lastDonation", pymongo.DESCENDING)])
 
     if request.method == "POST":
@@ -528,7 +530,7 @@ def donner():
                     "$lt": d,
                 },
             },
-            {"_id": 0, "password": 0, "email": 0, "phone": 0},
+            {"password": 0, "email": 0, "phone": 0},
         ).sort(
             [("bloodGroup", pymongo.ASCENDING), ("lastDonation", pymongo.DESCENDING)]
         )
@@ -547,7 +549,7 @@ def donner():
         #             "$lt": d,
         #         },
         #     },
-        #     {"_id": 0, "password": 0, "email": 0, "phone": 0},
+        #     {"password": 0, "email": 0, "phone": 0},
         # ).count()
         # print(result_count)
 
@@ -562,13 +564,13 @@ def donner():
     )
 
 
-@app.route("/donner/<name>")
-def donnerInfo(name):
+@app.route("/donner/<id>")
+def donnerInfo(id):
     result = users.find_one(
         {
-            "name": name,
+            "_id": id,
         },
-        {"_id": 0, "password": 0},
+        {"password": 0},
     )
     return render_template(
         "donner/donner-info.html",
@@ -585,7 +587,7 @@ def donnerInfo(name):
 def hospital():
     result = hospitals.find(
         {},
-        {"_id": 0, "password": 0},
+        {"password": 0},
     ).sort([("name", pymongo.ASCENDING)])
 
     if request.method == "POST":
@@ -608,7 +610,7 @@ def hospital():
                     },
                 ],
             },
-            {"_id": 0, "password": 0},
+            {"password": 0},
         ).sort([("name", pymongo.ASCENDING)])
 
     return render_template(
@@ -619,6 +621,53 @@ def hospital():
         hospitalEmail=authHospital["email"],
         type=type,
         result=result,
+    )
+
+
+@app.route("/hospital/<id>")
+def hospitalsInfo(id):
+    result = hospitals.find_one(
+        {
+            "_id": id,
+        },
+        {"password": 0},
+    )
+
+    bloodSamples = [
+        ["Group", 0],
+        ["A+", result["bloodGroupAP"]],
+        ["A-", result["bloodGroupAN"]],
+        ["B+", result["bloodGroupBP"]],
+        ["B-", result["bloodGroupBN"]],
+        ["AB+", result["bloodGroupABP"]],
+        ["AB-", result["bloodGroupABN"]],
+        ["O+", result["bloodGroupOP"]],
+        ["O-", result["bloodGroupON"]],
+    ]
+
+    bloodSamples = pd.DataFrame(bloodSamples, columns=["Blood Group", "Count"])
+
+    fig = px.bar(
+        bloodSamples,
+        x="Blood Group",
+        y="Count",
+        color="Blood Group",
+        color_discrete_sequence=px.colors.sequential.RdBu,
+        title="Blood Group Wise Data",
+    )
+
+    # Create graphJSON
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return render_template(
+        "hospitals/hospitals-info.html",
+        name=authUser["name"],
+        email=authUser["email"],
+        hospitalName=authHospital["name"],
+        hospitalEmail=authHospital["email"],
+        type=type,
+        hospital=result,
+        graphJSON=graphJSON,
     )
 
 

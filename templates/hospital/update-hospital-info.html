@@ -1,0 +1,305 @@
+{% extends "base.html" %} {% block title %}Donner{% endblock %} {% block content
+%}
+<!-- <section class="pt-5 pb-5 mt-0 align-items-center d-flex">
+        <div class="container-fluid">
+            <div
+                class="row justify-content-center align-items-center d-flex-row text-center h-100"
+            >
+                <div class="col-12 col-md-4 col-lg-3 h-50">
+                    
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+<section
+    class="pt-5 pb-5 mt-0 align-items-center d-flex"
+    style="min-height: 90vh"
+>
+    <div class="container-fluid">
+        <div
+            class="row row-cols-2 row-cols-lg-2 g-2 g-lg-3 justify-content-center align-items-center d-flex-row text-center h-100"
+        >
+            <div class="col col-md-4 col-lg-6 h-50 w-50">
+                <img
+                    src="static\blood-donation-vector-illustration-signup.png"
+                    class="img-fluid"
+                    alt="Responsive image"
+                    style="background-blend-mode: unset"
+                />
+            </div>
+            <div class="col col-md-4 col-lg-4 h-50">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h2
+                            class="card-title mt-3 mb-4 text-center px-2 text-danger"
+                        >
+                            BloodBucket
+                        </h2>
+                        <form name="signup_form" action="" method="POST">
+                            <div
+                                class="form-group input-group flex-nowrap mb-3"
+                            >
+                                <span
+                                    class="input-group-text"
+                                    id="addon-wrapping"
+                                    ><i
+                                        class="fa fa-user"
+                                        aria-hidden="true"
+                                    ></i
+                                ></span>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    class="form-control"
+                                    placeholder="Hospital Name"
+                                    aria-label="Hospital Name"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{hospitalName}}"
+                                    required
+                                />
+                            </div>
+                            <div
+                                class="form-group input-group flex-nowrap mb-3"
+                            >
+                                <span
+                                    class="input-group-text"
+                                    id="addon-wrapping"
+                                    ><i
+                                        class="fa fa-envelope"
+                                        aria-hidden="true"
+                                    ></i
+                                ></span>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    class="form-control"
+                                    placeholder="Email"
+                                    aria-label="Email"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{hospitalEmail}}"
+                                    required
+                                />
+                            </div>
+                            <!-- div for address input  -->
+                            <div
+                                class="form-group input-group flex-nowrap mb-3"
+                            >
+                                <span
+                                    class="input-group-text"
+                                    id="addon-wrapping"
+                                    ><i
+                                        class="fa fa-map-marker"
+                                        aria-hidden="true"
+                                    ></i
+                                ></span>
+                                <input
+                                    type="text"
+                                    name="address"
+                                    class="form-control"
+                                    placeholder="Address"
+                                    aria-label="Address"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{address}}"
+                                    required
+                                />
+                            </div>
+                            <!-- div for city input  -->
+                            <div class="input-group mb-3">
+                                <input
+                                    type="text"
+                                    name="city"
+                                    class="form-control"
+                                    placeholder="City"
+                                    aria-label="City"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{city}}"
+                                    required
+                                />
+                                <span class="input-group-text">@</span>
+                                <select
+                                    class="form-control inputstl"
+                                    id="expertise"
+                                    name="district"
+                                >
+                                    {% if district == 'Dhaka' %}
+                                    <option value="Dhaka" selected>
+                                        Dhaka
+                                    </option>
+                                    {% else %}
+                                    <option value="Dhaka">Dhaka</option>
+                                    {% endif %} {% if district == 'Chittagong'
+                                    %}
+                                    <option value="Chittagong" selected>
+                                        Chittagong
+                                    </option>
+                                    {% else %}
+                                    <option value="Chittagong">
+                                        Chittagong
+                                    </option>
+                                    {% endif %} {% if district == 'Rajshahi' %}
+                                    <option value="Rajshahi" selected>
+                                        Rajshahi
+                                    </option>
+                                    {% else %}
+                                    <option value="Rajshahi">Rajshahi</option>
+                                    {% endif %} {% if district == 'Khulna' %}
+                                    <option value="Khulna" selected>
+                                        Khulna
+                                    </option>
+                                    {% else %}
+                                    <option value="Khulna">Khulna</option>
+                                    {% endif %} {% if district == 'Barisal' %}
+                                    <option value="Barisal" selected>
+                                        Barisal
+                                    </option>
+                                    {% else %}
+                                    <option value="Barisal">Barisal</option>
+                                    {% endif %} {% if district == 'Sylhet' %}
+                                    <option value="Sylhet" selected>
+                                        Sylhet
+                                    </option>
+                                    {% else %}
+                                    <option value="Sylhet">Sylhet</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div
+                                class="form-group input-group flex-nowrap mb-3"
+                            >
+                                <span
+                                    class="input-group-text"
+                                    id="addon-wrapping"
+                                    ><i
+                                        class="fa fa-phone"
+                                        aria-hidden="true"
+                                    ></i
+                                ></span>
+                                <input
+                                    type="number"
+                                    name="phone"
+                                    class="form-control"
+                                    placeholder="Phone Number"
+                                    aria-label="Phone Number"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{phone}}"
+                                    required
+                                />
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon3"
+                                    >A+</span
+                                >
+                                <input
+                                    type="number"
+                                    name="bloodGroupAP"
+                                    class="form-control"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{bloodGroupAP}}"
+                                    required
+                                />
+                                <span class="input-group-text" id="basic-addon3"
+                                    >A-</span
+                                >
+                                <input
+                                    type="number"
+                                    name="bloodGroupAN"
+                                    class="form-control"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{bloodGroupAN}}"
+                                    required
+                                />
+                                <span class="input-group-text" id="basic-addon3"
+                                    >B+</span
+                                >
+                                <input
+                                    type="number"
+                                    name="bloodGroupBP"
+                                    class="form-control"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{bloodGroupBP}}"
+                                    required
+                                />
+                                <span class="input-group-text" id="basic-addon3"
+                                    >B-</span
+                                >
+                                <input
+                                    type="number"
+                                    name="bloodGroupBN"
+                                    class="form-control"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{bloodGroupBN}}"
+                                    required
+                                />
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon3"
+                                    >AB+</span
+                                >
+                                <input
+                                    type="number"
+                                    name="bloodGroupABP"
+                                    class="form-control"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{bloodGroupABP}}"
+                                    required
+                                />
+                                <span class="input-group-text" id="basic-addon3"
+                                    >AB-</span
+                                >
+                                <input
+                                    type="number"
+                                    name="bloodGroupABN"
+                                    class="form-control"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{bloodGroupABN}}"
+                                    required
+                                />
+                                <span class="input-group-text" id="basic-addon3"
+                                    >O+</span
+                                >
+                                <input
+                                    type="number"
+                                    name="bloodGroupOP"
+                                    class="form-control"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{bloodGroupOP}}"
+                                    required
+                                />
+                                <span class="input-group-text" id="basic-addon3"
+                                    >O-</span
+                                >
+                                <input
+                                    type="number"
+                                    name="bloodGroupON"
+                                    class="form-control"
+                                    aria-describedby="addon-wrapping"
+                                    value="{{bloodGroupON}}"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group mb-5">
+                                <button
+                                    type="submit"
+                                    name="submit"
+                                    class="btn btn-danger btn-block fw-bold"
+                                >
+                                    Update
+                                </button>
+                            </div>
+                            {% if error != "" %}
+                            <div class="alert alert-danger">{{ error }}</div>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+{% endblock %}

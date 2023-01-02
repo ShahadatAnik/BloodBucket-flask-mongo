@@ -1,0 +1,91 @@
+{% extends "base.html" %} {% block title %}Hospital Information{% endblock %} {%
+    block content %}
+    <div>
+        <div
+            class="text-center shadow mt-2 rounded"
+            style="
+                background-color: #d43838;
+                padding-bottom: 15em;
+                padding-top: 1em;
+            "
+        >
+            <h1 class="text-white">Hospital Details</h1>
+        </div>
+    
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 mt-2">
+            <div
+                class="col d-flex justify-content-center"
+                style="margin-top: -15em"
+            >
+                <!-- <img
+                    src="static\user-info.png"
+                    class="img-fluid"
+                    alt="Responsive image"
+                    style="background-blend-mode: unset"
+                /> -->
+                <div id="chart" class="chart rounded"></div>
+            </div>
+            <div
+                class="col d-flex justify-content-center"
+                style="margin-top: -15em"
+            >
+                <div class="card text-bg-danger w-75 text-center pb-3">
+                    <div class="card-body">
+                        <div class="rounded px-2 py-4">
+                            <h2 class="card-text mb-4">{{hospital['name']}}</h2>
+                        </div>
+                        <div class="px-2 py-4" style="background-color: #9d4242">
+                            <h4 class="card-text">
+                                <i
+                                    class="fa fa-location-arrow"
+                                    aria-hidden="true"
+                                    style="color: white"
+                                ></i>
+                                {{hospital['address']}}
+                            </h4>
+                            <h4 class="card-text">
+                                <i
+                                    class="fa fa-map-marker"
+                                    aria-hidden="true"
+                                    style="color: white"
+                                ></i>
+                                {{hospital['city']}}, {{hospital['district']}}
+                            </h4>
+                        </div>
+                        <div class="px-2 py-4">
+                            <h4 class="card-text mb-4">
+                                <i
+                                    class="fa fa-phone"
+                                    aria-hidden="true"
+                                    style="color: white"
+                                ></i>
+                                {{hospital['phone']}}
+                            </h4>
+                            <h4 class="card-text">
+                                <i
+                                    class="fa fa-envelope"
+                                    aria-hidden="true"
+                                    style="color: white"
+                                ></i>
+                                {{hospital['email']}}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript">
+        
+        var graphs = {{graphJSON | safe}};
+        Plotly.plot('chart',graphs,{});
+    </script>
+    
+    {% endblock %}
+    

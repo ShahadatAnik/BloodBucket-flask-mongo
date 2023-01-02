@@ -74,7 +74,7 @@ block content %}
                 <div class="text-center" style="z-index: 5">
                     <a
                         class="btn btn-warning fw-bold btn-lg w-50"
-                        href="/update-user-info"
+                        href="/update-hospital-info"
                         >Update</a
                     >
                 </div>
@@ -89,7 +89,7 @@ block content %}
 </script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script type="text/javascript">
-    
+
     var graphs = {{graphJSON | safe}};
     Plotly.plot('chart',graphs,{});
 </script>
