@@ -1,0 +1,68 @@
+{% extends "base.html" %} {% block title %}Hospital{% endblock %} {% block
+content %}
+<div>
+    <div
+        class="text-center shadow p-3 mt-2 rounded"
+        style="background-color: #d43838"
+    >
+        <h1 class="text-white">Hospital Information</h1>
+    </div>
+    <form class="form-inline mx-5" style="margin-top: -1em" method="POST">
+        <div class="input-group col-md-6">
+            <input
+                type="text"
+                name="hospital_name_or_location"
+                class="form-control border-warning border-5"
+                placeholder="Search Hospital Here..."
+                required
+            />
+            <span class="input-group-btn">
+                <button
+                    class="btn btn-primary"
+                    type="submit"
+                    name="submit_hospital_name_or_location"
+                >
+                    Search <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </span>
+        </div>
+    </form>
+
+    <div
+        class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-4 mt-2"
+    >
+        {% for hospital in result %}
+        <div class="col d-flex justify-content-center">
+            <div class="card text-bg-danger w-100 text-center">
+                <a
+                    href="/hospital/{{hospital['name']}}"
+                    class="text-decoration-none text-white"
+                >
+                    <div class="card-body">
+                        <h3 class="card-text">{{hospital['name']}}</h3>
+                        <h4 class="card-text">
+                            <i
+                                class="fa fa-map-marker"
+                                aria-hidden="true"
+                                style="color: white"
+                            ></i>
+                            {{hospital['city']}}, {{hospital['district']}}
+                        </h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- <div class="d-flex">
+            <div class="flex-grow-1 alert alert-danger text-center" role="alert">
+                No Books Found
+            </div>
+        </div> -->
+    </div>
+</div>
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+{% endblock %}

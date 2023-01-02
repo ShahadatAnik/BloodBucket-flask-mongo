@@ -1,5 +1,5 @@
-{% extends "base.html" %} {% block title %}Donner - {{donner['name']}}{%
-endblock %} {% block content %}
+{% extends "base.html" %} {% block title %}Hospital Information{% endblock %} {%
+block content %}
 <div>
     <div
         class="text-center shadow mt-2 rounded"
@@ -9,7 +9,7 @@ endblock %} {% block content %}
             padding-top: 1em;
         "
     >
-        <h1 class="text-white border-bottom border-5">Donner Details</h1>
+        <h1 class="text-white border-bottom border-5">Hospital Details</h1>
     </div>
 
     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 mt-2">
@@ -17,11 +17,13 @@ endblock %} {% block content %}
             class="col d-flex justify-content-center"
             style="margin-top: -15em"
         >
-            <img
-                src="../../static/user-info-2.png"
+            <!-- <img
+                src="static\user-info.png"
                 class="img-fluid"
                 alt="Responsive image"
-            />
+                style="background-blend-mode: unset"
+            /> -->
+            <div id="chart" class="chart rounded"></div>
         </div>
         <div
             class="col d-flex justify-content-center"
@@ -30,24 +32,34 @@ endblock %} {% block content %}
             <div class="card text-bg-danger w-75 text-center pb-3">
                 <div class="card-body">
                     <div class="rounded px-2 py-4">
-                        <h2 class="card-text mb-4">{{donner['name']}}</h2>
+                        <h2 class="card-text mb-4">{{hospitalName}}</h2>
+                    </div>
+                    <div class="px-2 py-4" style="background-color: #9d4242">
                         <h4 class="card-text">
                             <i
-                                class="fa fa-heart"
+                                class="fa fa-location-arrow"
                                 aria-hidden="true"
                                 style="color: white"
                             ></i>
-                            {{donner['bloodGroup']}}
+                            {{address}}
+                        </h4>
+                        <h4 class="card-text">
+                            <i
+                                class="fa fa-map-marker"
+                                aria-hidden="true"
+                                style="color: white"
+                            ></i>
+                            {{city}}, {{district}}
                         </h4>
                     </div>
-                    <div class="px-2 py-4" style="background-color: #9d4242">
+                    <div class="px-2 py-4">
                         <h4 class="card-text mb-4">
                             <i
                                 class="fa fa-phone"
                                 aria-hidden="true"
                                 style="color: white"
                             ></i>
-                            {{donner['phone']}}
+                            {{phone}}
                         </h4>
                         <h4 class="card-text">
                             <i
@@ -55,20 +67,16 @@ endblock %} {% block content %}
                                 aria-hidden="true"
                                 style="color: white"
                             ></i>
-                            {{donner['email']}}
+                            {{hospitalEmail}}
                         </h4>
                     </div>
-
-                    <div class="px-2 py-4">
-                        <h4 class="card-text">
-                            <i
-                                class="fa fa-calendar"
-                                aria-hidden="true"
-                                style="color: white"
-                            ></i>
-                            {{donner['lastDonation']}}
-                        </h4>
-                    </div>
+                </div>
+                <div class="text-center" style="z-index: 5">
+                    <a
+                        class="btn btn-warning fw-bold btn-lg w-50"
+                        href="/update-user-info"
+                        >Update</a
+                    >
                 </div>
             </div>
         </div>
@@ -79,4 +87,11 @@ endblock %} {% block content %}
         window.history.replaceState(null, null, window.location.href);
     }
 </script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+    
+    var graphs = {{graphJSON | safe}};
+    Plotly.plot('chart',graphs,{});
+</script>
+
 {% endblock %}

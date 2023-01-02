@@ -56,6 +56,11 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/donner">Donner</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/hospital"
+                                    >Hospital</a
+                                >
+                            </li>
                         </ul>
                         <div class="d-flex">
                             {% if name != "" %}
@@ -70,12 +75,30 @@
                             </span>
                             <button
                                 class="btn btn-danger fw-bold"
-                                onclick="window.location.href = '/logout';"
+                                onclick="window.location.href = '/logout/user';"
+                            >
+                                Logout
+                            </button>
+                            {% elif hospitalName != "" %}
+                            <span class="navbar-text fw-bold fs-5 mx-2">
+                                <a class="nav-link" href="/hospital-info"
+                                    ><i
+                                        class="fa fa-user"
+                                        aria-hidden="true"
+                                    ></i
+                                    >{{" "+hospitalName}}</a
+                                >
+                            </span>
+                            <button
+                                class="btn btn-danger fw-bold"
+                                onclick="window.location.href = '/logout/hospital';"
                             >
                                 Logout
                             </button>
                             {% else %}
-                            <a class="btn btn-success" href="/login">Login</a>
+                            <a class="btn btn-success" href="/login/user"
+                                >Login</a
+                            >
                             {% endif %}
                         </div>
                     </div>

@@ -4,13 +4,18 @@ from passlib.hash import pbkdf2_sha256
 import pymongo
 import datetime
 
+import pandas as pd
+import json
+import plotly
+import plotly.express as px
+
 app = Flask(__name__)
 
 # database connection setup
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["blood_bucket"]
 users = db["users"]
-hospital = db["hospital"]
+hospitals = db["hospital"]
 
 authUser = {
     "name": "",
@@ -36,6 +41,8 @@ authHospital = {
     "bloodGroupOP": "",
     "bloodGroupON": "",
 }
+
+type = ""
 
 
 # login and signup For User
@@ -75,6 +82,7 @@ class User:
             authUser["phone"] = temp["phone"]
             authUser["bloodGroup"] = temp["bloodGroup"]
             authUser["lastDonation"] = temp["lastDonation"]
+            type = "user"
             return 200
         else:
             return "Invalid email or password"
@@ -85,6 +93,7 @@ class User:
         authUser["phone"] = ""
         authUser["bloodGroup"] = ""
         authUser["lastDonation"] = ""
+        type = ""
 
         return redirect("/", code=302)
 
@@ -113,7 +122,7 @@ class User:
         return 200
 
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login/user", methods=["GET", "POST"])
 def login():
     error = ""
     if request.method == "POST":
@@ -125,7 +134,7 @@ def login():
     return render_template("user/login.html", error=error)
 
 
-@app.route("/signup", methods=["GET", "POST"])
+@app.route("/signup/user", methods=["GET", "POST"])
 def signup():
     error = ""
     if request.method == "POST":
@@ -133,11 +142,11 @@ def signup():
         if error != 200:
             return render_template("user/signup.html", error=error)
         else:
-            return redirect("user/login", code=302)
+            return redirect("../login/user", code=302)
     return render_template("user/signup.html", error=error)
 
 
-@app.route("/logout")
+@app.route("/logout/user")
 def logout():
     return User().logout()
 
@@ -204,9 +213,8 @@ class Hospital:
             "_id": uuid.uuid4().hex,
             "name": request.form.get("name"),
             "email": request.form.get("email"),
-            "password": request.form.get("password"),
-            "phone": request.form.get("phone"),
             "address": request.form.get("address"),
+            "phone": request.form.get("phone"),
             "city": request.form.get("city"),
             "district": request.form.get("district"),
             "bloodGroupAP": request.form.get("bloodGroupAP"),
@@ -217,14 +225,15 @@ class Hospital:
             "bloodGroupABN": request.form.get("bloodGroupABN"),
             "bloodGroupOP": request.form.get("bloodGroupOP"),
             "bloodGroupON": request.form.get("bloodGroupON"),
+            "password": request.form.get("password"),
         }
-        if hospital.find_one({"email": hospital["email"]}):
+        if hospitals.find_one({"email": hospital["email"]}):
             return "Email already exists"
         if hospital["password"] != request.form.get("repassword"):
             return "Password do not match"
         hospital["password"] = pbkdf2_sha256.hash(hospital["password"])
         print(hospital)
-        hospital.insert_one(hospital)
+        hospitals.insert_one(hospital)
         return 200
 
     def login(self):
@@ -232,13 +241,13 @@ class Hospital:
             "email": request.form.get("email"),
             "password": request.form.get("password"),
         }
-        if not hospital.find_one({"email": hospital["email"]}):
+        if not hospitals.find_one({"email": hospital["email"]}):
             return "Invalid email or password"
         if pbkdf2_sha256.verify(
             hospital["password"],
-            hospital.find_one({"email": hospital["email"]})["password"],
+            hospitals.find_one({"email": hospital["email"]})["password"],
         ):
-            temp = hospital.find_one(
+            temp = hospitals.find_one(
                 {"email": hospital["email"]}, {"_id": 0, "password": 0}
             )
             authHospital["name"] = temp["name"]
@@ -255,6 +264,7 @@ class Hospital:
             authHospital["bloodGroupABN"] = temp["bloodGroupABN"]
             authHospital["bloodGroupOP"] = temp["bloodGroupOP"]
             authHospital["bloodGroupON"] = temp["bloodGroupON"]
+            type = "hospital"
 
             return 200
 
@@ -276,6 +286,7 @@ class Hospital:
         authHospital["bloodGroupABN"] = ""
         authHospital["bloodGroupOP"] = ""
         authHospital["bloodGroupON"] = ""
+        type = ""
 
         return redirect("/", code=302)
 
@@ -297,9 +308,9 @@ class Hospital:
         bloodGroupON,
     ):
         if email != authHospital["email"]:
-            if hospital.find_one({"email": email}):
+            if hospitals.find_one({"email": email}):
                 return "Email already exists"
-        hospital.update_one(
+        hospitals.update_one(
             {"email": authHospital["email"]},
             {
                 "$set": {
@@ -337,53 +348,77 @@ class Hospital:
         return 200
 
 
-@app.route("/login-hospital", methods=["POST"])
+@app.route("/login/hospital", methods=["GET", "POST"])
 def loginHospital():
     error = ""
     if request.method == "POST":
-        error = Hospital.login()
+        error = Hospital.login(self=Hospital)
         if error != 200:
-            return render_template("hospital/login-hospital.html", error=error)
+            return render_template("hospital/login.html", error=error)
         else:
-            return redirect("/hospital-info", code=302)
-    return render_template("hospital/login-hospital.html", error=error)
+            return redirect("/", code=302)
+    return render_template("hospital/login.html", error=error)
 
 
-@app.route("/signup-hospital", methods=["POST"])
+@app.route("/signup/hospital", methods=["GET", "POST"])
 def signupHospital():
     error = ""
     if request.method == "POST":
-        error = Hospital.signup()
+        error = Hospital.signup(self=Hospital)
         if error != 200:
-            return render_template("hospital/signup-hospital.html", error=error)
+            return render_template("hospital/signup.html", error=error)
         else:
-            return redirect("/", code=302)
-    return render_template("hospital/signup-hospital.html", error=error)
+            return redirect("/login/hospital", code=302)
+    return render_template("hospital/signup.html", error=error)
 
 
-@app.route("/logout-hospital")
+@app.route("/logout/hospital")
 def logoutHospital():
-    return Hospital.logout()
+    return Hospital.logout(
+        self=Hospital,
+    )
 
 
 @app.route("/hospital-info")
 def hospitalInfo():
+    # Create figure
+    bloodSamples = [
+        ["Group", 0],
+        ["A+", authHospital["bloodGroupAP"]],
+        ["A-", authHospital["bloodGroupAN"]],
+        ["B+", authHospital["bloodGroupBP"]],
+        ["B-", authHospital["bloodGroupBN"]],
+        ["AB+", authHospital["bloodGroupABP"]],
+        ["AB-", authHospital["bloodGroupABN"]],
+        ["O+", authHospital["bloodGroupOP"]],
+        ["O-", authHospital["bloodGroupON"]],
+    ]
+
+    bloodSamples = pd.DataFrame(bloodSamples, columns=["Blood Group", "Count"])
+
+    fig = px.bar(
+        bloodSamples,
+        x="Blood Group",
+        y="Count",
+        color="Blood Group",
+        color_discrete_sequence=px.colors.sequential.RdBu,
+        title="Blood Group Wise Data",
+    )
+
+    # Create graphJSON
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
     return render_template(
-        "hospital-info.html",
-        name=authHospital["name"],
-        email=authHospital["email"],
+        "hospital/hospital-info.html",
+        name=authUser["name"],
+        email=authUser["email"],
+        hospitalName=authHospital["name"],
+        hospitalEmail=authHospital["email"],
         phone=authHospital["phone"],
         address=authHospital["address"],
         city=authHospital["city"],
         district=authHospital["district"],
-        bloodGroupAP=authHospital["bloodGroupAP"],
-        bloodGroupAN=authHospital["bloodGroupAN"],
-        bloodGroupBP=authHospital["bloodGroupBP"],
-        bloodGroupBN=authHospital["bloodGroupBN"],
-        bloodGroupABP=authHospital["bloodGroupABP"],
-        bloodGroupABN=authHospital["bloodGroupABN"],
-        bloodGroupOP=authHospital["bloodGroupOP"],
-        bloodGroupON=authHospital["bloodGroupON"],
+        graphJSON=graphJSON,
     )
 
 
@@ -394,10 +429,10 @@ def updateHospital():
         error = Hospital.update_info(
             request.form.get("name"),
             request.form.get("email"),
-            request.form.get("phone"),
             request.form.get("address"),
             request.form.get("city"),
             request.form.get("district"),
+            request.form.get("phone"),
             request.form.get("bloodGroupAP"),
             request.form.get("bloodGroupAN"),
             request.form.get("bloodGroupBP"),
@@ -409,7 +444,7 @@ def updateHospital():
         )
         if error != 200:
             return render_template(
-                "hospital/update-hospital.html",
+                "hospital/update-hospitals.html",
                 error=error,
                 name=authHospital["name"],
                 email=authHospital["email"],
@@ -430,7 +465,7 @@ def updateHospital():
             return redirect("/hospital-info", code=302)
 
     return render_template(
-        "hospital/update-hospital.html",
+        "hospital/update-hospitals.html",
         error=error,
         name=authHospital["name"],
         email=authHospital["email"],
@@ -458,6 +493,7 @@ def index():
         email=authUser["email"],
         hospitalName=authHospital["name"],
         hospitalEmail=authHospital["email"],
+        type=type,
     )
 
 
@@ -521,6 +557,7 @@ def donner():
         email=authUser["email"],
         hospitalName=authHospital["name"],
         hospitalEmail=authHospital["email"],
+        type=type,
         result=result,
     )
 
@@ -539,7 +576,49 @@ def donnerInfo(name):
         email=authUser["email"],
         hospitalName=authHospital["name"],
         hospitalEmail=authHospital["email"],
+        type=type,
         donner=result,
+    )
+
+
+@app.route("/hospital", methods=["GET", "POST"])
+def hospital():
+    result = hospitals.find(
+        {},
+        {"_id": 0, "password": 0},
+    ).sort([("name", pymongo.ASCENDING)])
+
+    if request.method == "POST":
+        hospital_name_or_location = request.form.get("hospital_name_or_location")
+        result = hospitals.find(
+            {
+                "$or": [
+                    {"name": {"$regex": hospital_name_or_location, "$options": "i"}},
+                    {
+                        "city": {
+                            "$regex": hospital_name_or_location,
+                            "$options": "i",
+                        }
+                    },
+                    {
+                        "district": {
+                            "$regex": hospital_name_or_location,
+                            "$options": "i",
+                        }
+                    },
+                ],
+            },
+            {"_id": 0, "password": 0},
+        ).sort([("name", pymongo.ASCENDING)])
+
+    return render_template(
+        "hospitals/hospitals.html",
+        name=authUser["name"],
+        email=authUser["email"],
+        hospitalName=authHospital["name"],
+        hospitalEmail=authHospital["email"],
+        type=type,
+        result=result,
     )
 
 
