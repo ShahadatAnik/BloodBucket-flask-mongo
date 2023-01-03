@@ -262,7 +262,6 @@ class Hospital:
             authHospital["bloodGroupABN"] = temp["bloodGroupABN"]
             authHospital["bloodGroupOP"] = temp["bloodGroupOP"]
             authHospital["bloodGroupON"] = temp["bloodGroupON"]
-            type = "hospital"
 
             return 200
 
@@ -329,6 +328,7 @@ class Hospital:
                 }
             },
         )
+
         authHospital["name"] = name
         authHospital["email"] = email
         authHospital["phone"] = phone
@@ -424,13 +424,13 @@ def hospitalInfo():
 def updateHospital():
     error = ""
     if request.method == "POST":
-        error = Hospital.update_info(
+        error = Hospital().update_info(
             request.form.get("name"),
             request.form.get("email"),
+            request.form.get("phone"),
             request.form.get("address"),
             request.form.get("city"),
             request.form.get("district"),
-            request.form.get("phone"),
             request.form.get("bloodGroupAP"),
             request.form.get("bloodGroupAN"),
             request.form.get("bloodGroupBP"),
@@ -489,13 +489,34 @@ def updateHospital():
 # others
 @app.route("/")
 def index():
+    # count number of users who are eligible to donate blood
+    days = datetime.datetime.now() - datetime.timedelta(days=90)
+    d = str(days.strftime("%Y-%m-%d"))
+    # count number of donners
+    donners_count = users.count_documents({})
+    # count number of available
+    donners_available_count = users.count_documents(
+        {
+            "lastDonation": {
+                "$lt": d,
+            },
+        }
+    )
+
+    # count number of hospitals
+    hospitals_count = hospitals.count_documents({})
+
+    
+
     return render_template(
         "index.html",
         name=authUser["name"],
         email=authUser["email"],
         hospitalName=authHospital["name"],
         hospitalEmail=authHospital["email"],
-        type=type,
+        donners_count=donners_count,
+        donners_available_count=donners_available_count,
+        hospitals_count=hospitals_count,
     )
 
 
@@ -503,7 +524,6 @@ def index():
 def donner():
     days = datetime.datetime.now() - datetime.timedelta(days=90)
     d = str(days.strftime("%Y-%m-%d"))
-    print(d)
     result = users.find(
         {
             "lastDonation": {

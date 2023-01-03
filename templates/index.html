@@ -1,60 +1,138 @@
 {% extends "base.html" %} {% block title %}Home{%endblock%} {% block content %}
 {% block banner_slider %}
-<!--Banner Slider-->
 <div
-    id="carouselExampleControls"
-    class="carousel slide"
+    id="carouselExampleDark"
+    class="carousel carousel-dark slide"
     data-bs-ride="carousel"
 >
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img
-                src="{{url_for('static', filename='image1.jpg')}}"
-                class="d-block w-100"
-            />
-        </div>
-        <div class="carousel-item">
-            <img
-                src="{{url_for('static', filename='img2.jpg')}}"
-                class="d-block w-100"
-            />
-        </div>
-        <div class="carousel-item">
-            <img
-                src="{{url_for('static', filename='img3.jpg')}}"
-                class="d-block w-100"
-            />
+    <div class="text-center">
+        <div class="carousel-inner text-center">
+            <div class="carousel-item active" data-bs-interval="3000">
+                <img
+                    src="{{url_for('static', filename='car2.jpg')}}"
+                    class="w-75 img-fluid rounded"
+                />
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img
+                    src="{{url_for('static', filename='car4.jpg')}}"
+                    class="w-75 rounded"
+                />
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img
+                    src="{{url_for('static', filename='car3.jpg')}}"
+                    class="w-75 rounded"
+                />
+            </div>
         </div>
     </div>
-    <a
+    <button
         class="carousel-control-prev"
-        href="#carouselExampleControls"
-        role="button"
+        type="button"
+        data-bs-target="#carouselExampleDark"
         data-bs-slide="prev"
     >
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
-    </a>
-    <a
+    </button>
+    <button
         class="carousel-control-next"
-        href="#carouselExampleControls"
-        role="button"
+        type="button"
+        data-bs-target="#carouselExampleDark"
         data-bs-slide="next"
     >
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
-    </a>
+    </button>
 </div>
-<!-- End Banner Slider -->
-
 {% endblock banner_slider %}
-<div class="container_fluid bg-danger">
-    <!-- Footer content -->
-    <align-center
-        ><h1 style="color: white">
-            <b> Donate Blood Save Life!! </b>
-        </h1></align-center
-    >
+<div class="container-fluid my-5">
+    <div class="row">
+        <div class="col-12 col-md-4 col-lg-12 h-50">
+            <div
+                class="rounded p-2"
+                style="
+                    background-image: url('../static/car1.jpg');
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-attachment: fixed;
+                    height: 100%;
+                    width: 100%;
+                    position: relative;
+                "
+            >
+                <div class="card-body p-5">
+                    <div class="text-center text-danger fs-1 fw-bold mb-5">
+                        << Our Mission >>
+                    </div>
+                    <div class="text-center text-dark fs-1">
+                        To provide a platform for the people who are in need of
+                        blood and the people who are willing to donate blood.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-{%endblock%}
+<div class="container-fluid my-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center text-danger fs-1 fw-bold mb-4">
+                << We Have >>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4 h-50">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2
+                        class="card-title mt-3 mb-4 text-center px-2 text-danger"
+                    >
+                        Total Donners
+                    </h2>
+                    <h1 class="text-center text-success">{{donners_count}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4 h-50">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2
+                        class="card-title mt-3 mb-4 text-center px-2 text-danger"
+                    >
+                        Total Hospitals
+                    </h2>
+                    <h1 class="text-center text-success">
+                        {{hospitals_count}}
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-4 h-50">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2
+                        class="card-title mt-3 mb-4 text-center px-2 text-danger"
+                    >
+                        Available For Donation
+                    </h2>
+                    <h1 class="text-center text-success">
+                        {{donners_available_count}}
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="progress my-5">
+        <div
+            class="progress-bar progress-bar-striped progress-bar-animated text-danger"
+            role="progressbar"
+            style="width: 100%; background-color: #c33030"
+        ></div>
+
+        <div id="chart" class="chart rounded"></div>
+    </div>
+
+    {%endblock%}
+</div>

@@ -14,6 +14,34 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
+        <style>
+            .card {
+                padding: 10px 0px 10px;
+                /* background-color: #cd3d3d; */
+                border-radius: 8px;
+                color: white;
+            }
+
+            .shadow {
+                box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+            }
+            .card:hover {
+                box-shadow: 10px 12px 12px 4px #e9ecef;
+                transform: scale(1.02);
+            }
+
+            .card-body {
+                padding: 0px 15px;
+                color: white;
+            }
+
+            @media (max-width: 991px) {
+                .card {
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+                }
+            }
+        </style>
     </head>
     <body>
         <div class="container-fluid">
@@ -123,4 +151,5 @@
             ></script>
         </div>
     </body>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </html>
